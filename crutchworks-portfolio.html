@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Crutchworks | Mechanical Engineering Projects, Wellington NZ</title>
+<meta name="description" content="Selected engineering projects by Crutchworks — FEA analysis, structural design, ROPS certification and defence engineering work across NZ industry.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black:   #0a0c0e;
+    --offwhite:#f0ede8;
+    --steel:   #b8bfc9;
+    --khaki:   #8a7e5f;
+    --olive:   #4a5240;
+    --signal:  #c8a84b;
+    --danger:  #8b2323;
+    --grid:    rgba(184,191,201,0.08);
+    --surface: #0f1214;
+    --border:  rgba(184,191,201,0.1);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--offwhite);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10,12,14,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.18em; color:var(--offwhite); text-decoration:none; }
+  .nav-logo span { color:var(--signal); }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--steel); text-decoration:none; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--signal); }
+  .nav-cta { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--black); background:var(--signal); padding:0.55rem 1.4rem; text-decoration:none; transition:background 0.2s; }
+  .nav-cta:hover { background:var(--offwhite); }
+
+  /* PAGE */
+  .page { padding-top:68px; position:relative; z-index:1; }
+
+  /* HEADER */
+  .port-header { position:relative; padding:5rem 3rem 4rem; border-bottom:1px solid var(--border); overflow:hidden; }
+  .port-header::before { content:'WORK'; position:absolute; font-family:'Bebas Neue',sans-serif; font-size:30vw; line-height:0.85; color:rgba(200,168,75,0.04); bottom:-0.05em; right:-0.02em; pointer-events:none; white-space:nowrap; }
+  .header-inner { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:end; }
+  .eyebrow { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--signal); margin-bottom:1.2rem; display:flex; align-items:center; gap:1rem; animation:fadeUp 0.6s ease 0.05s both; }
+  .eyebrow::before { content:''; display:block; width:40px; height:1px; background:var(--signal); }
+  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(3.5rem,8vw,7rem); line-height:0.92; letter-spacing:0.03em; color:var(--offwhite); animation:fadeUp 0.7s ease 0.1s both; }
+  .header-right { padding-bottom:0.5rem; animation:fadeUp 0.7s ease 0.2s both; }
+  .header-right p { font-size:0.95rem; color:var(--steel); line-height:1.75; margin-bottom:1.5rem; max-width:460px; }
+  .stat-row { display:flex; gap:2rem; flex-wrap:wrap; }
+  .stat-badge { display:flex; flex-direction:column; gap:0.2rem; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; line-height:1; color:var(--signal); }
+  .stat-lbl { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--khaki); }
+
+  /* FILTER BAR */
+  .filter-bar { border-bottom:1px solid var(--border); padding:0 3rem; position:sticky; top:68px; z-index:50; background:rgba(10,12,14,0.96); backdrop-filter:blur(8px); }
+  .filter-inner { max-width:1200px; margin:0 auto; display:flex; gap:0; align-items:stretch; overflow-x:auto; }
+  .filter-btn { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--khaki); background:transparent; border:none; padding:1rem 1.5rem; cursor:pointer; transition:color 0.2s; border-right:1px solid var(--border); white-space:nowrap; position:relative; }
+  .filter-btn::after { content:''; position:absolute; bottom:0; left:0; right:0; height:2px; background:var(--signal); transform:scaleX(0); transition:transform 0.2s; }
+  .filter-btn:hover { color:var(--steel); }
+  .filter-btn.active { color:var(--signal); }
+  .filter-btn.active::after { transform:scaleX(1); }
+
+  /* PROJECT GRID */
+  .project-section { max-width:1200px; margin:0 auto; padding:4rem 3rem 6rem; }
+  .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); }
+
+  /* PROJECT CARD */
+  .project-card { background:var(--black); cursor:pointer; position:relative; overflow:hidden; transition:background 0.3s; display:flex; flex-direction:column; }
+  .project-card:hover { background:var(--surface); }
+  .project-card::before { content:''; position:absolute; top:0; left:0; width:100%; height:2px; background:var(--signal); transform:scaleX(0); transform-origin:left; transition:transform 0.35s ease; }
+  .project-card:hover::before { transform:scaleX(1); }
+  .project-card.hidden { display:none; }
+
+  .card-visual { position:relative; height:200px; overflow:hidden; background:#0d1012; border-bottom:1px solid var(--border); flex-shrink:0; }
+  .fea-canvas { width:100%; height:100%; display:block; }
+  .card-tag { position:absolute; top:1rem; left:1rem; font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--black); background:var(--signal); padding:0.25rem 0.6rem; }
+  .card-confidential { position:absolute; bottom:1rem; right:1rem; font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(184,191,201,0.4); border:1px solid rgba(184,191,201,0.15); padding:0.2rem 0.5rem; }
+
+  .card-body { padding:1.75rem; flex:1; display:flex; flex-direction:column; }
+  .card-sector { font-family:'DM Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--khaki); margin-bottom:0.6rem; }
+  .card-title { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.06em; color:var(--offwhite); margin-bottom:0.75rem; line-height:1.1; }
+  .card-desc { font-size:0.82rem; color:var(--steel); line-height:1.65; flex:1; }
+  .card-footer { margin-top:1.25rem; padding-top:1rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  .card-tools { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .tool-tag { font-family:'DM Mono',monospace; font-size:0.55rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(184,191,201,0.5); border:1px solid rgba(184,191,201,0.12); padding:0.18rem 0.45rem; }
+  .card-arrow { font-family:'DM Mono',monospace; font-size:0.65rem; color:var(--signal); transition:transform 0.2s; user-select:none; }
+  .project-card:hover .card-arrow { transform:translateX(4px); }
+
+  /* DETAIL OVERLAY */
+  .detail-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(10,12,14,0.92); backdrop-filter:blur(12px); overflow-y:auto; padding:2rem; }
+  .detail-overlay.open { display:flex; align-items:flex-start; justify-content:center; }
+  .detail-panel { background:var(--surface); border:1px solid rgba(200,168,75,0.2); max-width:860px; width:100%; margin:4rem auto; position:relative; animation:panelIn 0.35s ease both; }
+  @keyframes panelIn { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+  .detail-close { position:absolute; top:1.5rem; right:1.5rem; font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--khaki); background:none; border:1px solid var(--border); padding:0.4rem 0.9rem; cursor:pointer; transition:all 0.2s; }
+  .detail-close:hover { border-color:var(--signal); color:var(--signal); }
+  .detail-visual { height:280px; background:#0d1012; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+  .detail-body { padding:2.5rem; }
+  .detail-meta { display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:2rem; padding-bottom:2rem; border-bottom:1px solid var(--border); }
+  .meta-item { display:flex; flex-direction:column; gap:0.2rem; }
+  .meta-label { font-family:'DM Mono',monospace; font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--signal); }
+  .meta-value { font-family:'DM Mono',monospace; font-size:0.78rem; color:var(--steel); }
+  .detail-body h2 { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:0.05em; color:var(--offwhite); margin-bottom:1.5rem; line-height:1; }
+  .detail-section { margin-bottom:1.75rem; }
+  .detail-section-title { font-family:'DM Mono',monospace; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--signal); margin-bottom:0.75rem; display:flex; align-items:center; gap:0.75rem; }
+  .detail-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+  .detail-section p { font-size:0.9rem; color:var(--steel); line-height:1.75; }
+  .outcomes-list { list-style:none; display:flex; flex-direction:column; gap:0.5rem; }
+  .outcomes-list li { font-family:'DM Mono',monospace; font-size:0.78rem; letter-spacing:0.05em; color:var(--steel); padding:0.6rem 0; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; gap:0.75rem; }
+  .outcomes-list li::before { content:'▸'; color:var(--signal); font-size:0.55rem; flex-shrink:0; margin-top:0.2rem; }
+  .standards-used { display:flex; flex-wrap:wrap; gap:0.5rem; }
+  .std-chip { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; color:var(--khaki); border:1px solid rgba(138,126,95,0.3); padding:0.3rem 0.7rem; }
+  .detail-cta { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--border); display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn-primary { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--black); background:var(--signal); padding:0.8rem 1.8rem; text-decoration:none; border:none; cursor:pointer; transition:background 0.2s; }
+  .btn-primary:hover { background:var(--offwhite); }
+  .btn-secondary { font-family:'DM Mono',monospace; font-size:0.72rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--steel); border:1px solid var(--border); padding:0.8rem 1.8rem; text-decoration:none; transition:border-color 0.2s,color 0.2s; }
+  .btn-secondary:hover { border-color:var(--signal); color:var(--signal); }
+
+  /* CTA BAND */
+  .cta-band { background:linear-gradient(135deg,var(--olive),#2a2e1f); padding:5rem 3rem; text-align:center; position:relative; overflow:hidden; }
+  .cta-band::before { content:'CRUTCHWORKS'; position:absolute; font-family:'Bebas Neue',sans-serif; font-size:18vw; color:rgba(255,255,255,0.04); top:50%; left:50%; transform:translate(-50%,-50%); white-space:nowrap; pointer-events:none; }
+  .cta-band h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2rem,4vw,3.5rem); letter-spacing:0.04em; margin-bottom:1rem; position:relative; }
+  .cta-band p { color:rgba(240,237,232,0.7); max-width:520px; margin:0 auto 2.5rem; font-size:0.95rem; position:relative; }
+  .cta-btns { display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; position:relative; }
+
+  /* FOOTER */
+  footer { background:#060708; border-top:1px solid var(--border); padding:2.5rem 3rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; position:relative; z-index:1; }
+  .footer-logo { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:0.2em; color:var(--steel); }
+  .footer-logo span { color:var(--signal); }
+  .footer-info { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; color:var(--khaki); text-align:center; }
+  .footer-charter { font-family:'DM Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; color:var(--khaki); text-align:right; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  /* RESPONSIVE */
+  @media(max-width:960px){
+    nav{padding:1rem 1.5rem;}
+    .nav-links{display:none;}
+    .port-header{padding:4rem 1.5rem 3rem;}
+    .header-inner{grid-template-columns:1fr;gap:2rem;}
+    .filter-bar{padding:0 1.5rem;}
+    .project-section{padding:3rem 1.5rem 4rem;}
+    .projects-grid{grid-template-columns:1fr 1fr;}
+    footer{padding:1.5rem;flex-direction:column;text-align:center;}
+    .footer-charter{text-align:center;}
+  }
+  @media(max-width:640px){
+    .projects-grid{grid-template-columns:1fr;}
+    .detail-panel{margin:2rem auto;}
+    .detail-meta{gap:1rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="https://www.crutchworks.com" class="nav-logo">CRUTCH<span>WORKS</span></a>
+  <ul class="nav-links">
+    <li><a href="https://www.crutchworks.com">Home</a></li>
+    <li><a href="#">Services</a></li>
+    <li><a href="crutchworks-portfolio.html" class="active">Portfolio</a></li>
+    <li><a href="crutchworks-defence.html">Defence</a></li>
+    <li><a href="crutchworks-contact.html">Contact</a></li>
+  </ul>
+  <a href="crutchworks-contact.html" class="nav-cta">Engage Us</a>
+</nav>
+
+<div class="page">
+
+  <header class="port-header">
+    <div class="header-inner">
+      <div>
+        <div class="eyebrow">Selected Projects</div>
+        <h1>Proven<br>In The<br>Field.</h1>
+      </div>
+      <div class="header-right">
+        <p>A selection of engineering projects completed for clients across mining, heavy industry, infrastructure, and defence. Client details are anonymised; technical outcomes are real. All work completed by Andrew Crutchley, Chartered Professional Engineer.</p>
+        <div class="stat-row">
+          <div class="stat-badge"><span class="stat-num">20+</span><span class="stat-lbl">Years Experience</span></div>
+          <div class="stat-badge"><span class="stat-num">15+</span><span class="stat-lbl">Years FEA</span></div>
+          <div class="stat-badge"><span class="stat-num">NZ &amp; AU</span><span class="stat-lbl">Project Reach</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <button class="filter-btn active" data-filter="all">All Projects</button>
+      <button class="filter-btn" data-filter="fea">FEA Analysis</button>
+      <button class="filter-btn" data-filter="structural">Structural Design</button>
+      <button class="filter-btn" data-filter="rops">ROPS / FOPS</button>
+      <button class="filter-btn" data-filter="defence">Defence</button>
+      <button class="filter-btn" data-filter="mining">Mining</button>
+      <button class="filter-btn" data-filter="infrastructure">Infrastructure</button>
+      <button class="filter-btn" data-filter="scanning">3D Scanning</button>
+    </div>
+  </div>
+
+  <section class="project-section">
+    <div class="projects-grid" id="projects-grid">
+
+      <!-- PROJECT 1: Mill Reline Machine -->
+      <article class="project-card" data-cats="fea mining rops" data-id="1">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b1"><feGaussianBlur stdDeviation="3.5"/></filter>
+              <linearGradient id="leg1" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <rect x="25" y="70" width="350" height="70" rx="2" fill="#0d1214"/>
+            <rect x="25" y="68" width="350" height="4" fill="#1e2428"/>
+            <rect x="25" y="138" width="350" height="4" fill="#1e2428"/>
+            <rect x="25" y="68" width="4" height="74" fill="#1e2428"/>
+            <rect x="371" y="68" width="4" height="74" fill="#1e2428"/>
+            <line x1="109" y1="72" x2="109" y2="138" stroke="#1e2428" stroke-width="2"/>
+            <line x1="193" y1="72" x2="193" y2="138" stroke="#1e2428" stroke-width="2"/>
+            <line x1="277" y1="72" x2="277" y2="138" stroke="#1e2428" stroke-width="2"/>
+            <ellipse cx="75" cy="100" rx="38" ry="22" fill="#8b1a0a" opacity="0.85" filter="url(#b1)"/>
+            <ellipse cx="193" cy="104" rx="55" ry="18" fill="#c84b0a" opacity="0.65" filter="url(#b1)"/>
+            <ellipse cx="320" cy="96" rx="38" ry="24" fill="#6b1a0a" opacity="0.78" filter="url(#b1)"/>
+            <ellipse cx="148" cy="84" rx="22" ry="14" fill="#c8a84b" opacity="0.88" filter="url(#b1)"/>
+            <rect x="30" y="170" width="200" height="8" rx="1" fill="url(#leg1)" opacity="0.85"/>
+            <text x="30" y="168" font-family="monospace" font-size="7" fill="#8a7e5f">0 MPa</text>
+            <text x="228" y="168" font-family="monospace" font-size="7" fill="#8a7e5f" text-anchor="end">412 MPa</text>
+            <line x1="0" y1="48" x2="400" y2="48" stroke="#b8bfc9" stroke-width="0.3" opacity="0.1"/>
+            <line x1="0" y1="160" x2="400" y2="160" stroke="#b8bfc9" stroke-width="0.3" opacity="0.1"/>
+            <line x1="200" y1="0" x2="200" y2="200" stroke="#b8bfc9" stroke-width="0.3" opacity="0.1"/>
+          </svg>
+          <div class="card-tag">FEA · ROPS</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Mining &amp; Heavy Industry</div>
+          <div class="card-title">Mill Reline Machine Structural Verification</div>
+          <p class="card-desc">FEA-based structural assessment of a large mill reline machine boom arm and chassis under maximum operational loading. Analysis identified a stress concentration requiring a weld detail change, avoiding a potential in-service failure.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">AS3990</span><span class="tool-tag">Static FEA</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 2: Light Vehicle ROPS -->
+      <article class="project-card" data-cats="rops structural defence" data-id="2">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b2"><feGaussianBlur stdDeviation="4"/></filter>
+              <marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z" fill="#c8a84b"/>
+              </marker>
+              <linearGradient id="leg2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <path d="M60 145 L60 78 L100 48 L300 48 L340 78 L340 145 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1.5"/>
+            <line x1="100" y1="48" x2="100" y2="145" stroke="#2a3038" stroke-width="2"/>
+            <line x1="300" y1="48" x2="300" y2="145" stroke="#2a3038" stroke-width="2"/>
+            <line x1="100" y1="95" x2="300" y2="95" stroke="#2a3038" stroke-width="1.5"/>
+            <ellipse cx="100" cy="54" rx="24" ry="16" fill="#8b1a0a" opacity="0.9" filter="url(#b2)"/>
+            <ellipse cx="300" cy="54" rx="24" ry="16" fill="#8b1a0a" opacity="0.9" filter="url(#b2)"/>
+            <ellipse cx="200" cy="48" rx="55" ry="11" fill="#c84b0a" opacity="0.6" filter="url(#b2)"/>
+            <ellipse cx="100" cy="142" rx="20" ry="12" fill="#4a7a4a" opacity="0.7" filter="url(#b2)"/>
+            <ellipse cx="300" cy="142" rx="20" ry="12" fill="#4a7a4a" opacity="0.7" filter="url(#b2)"/>
+            <line x1="200" y1="16" x2="200" y2="40" stroke="#c8a84b" stroke-width="1.5" marker-end="url(#arr2)"/>
+            <text x="210" y="28" font-family="monospace" font-size="7" fill="#c8a84b">ROLLOVER LOAD</text>
+            <rect x="30" y="170" width="200" height="8" rx="1" fill="url(#leg2)" opacity="0.85"/>
+            <text x="30" y="168" font-family="monospace" font-size="7" fill="#8a7e5f">0 MPa</text>
+            <text x="228" y="168" font-family="monospace" font-size="7" fill="#8a7e5f" text-anchor="end">320 MPa</text>
+          </svg>
+          <div class="card-tag">ROPS · Defence</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Defence &amp; Military Vehicles</div>
+          <div class="card-title">Light Vehicle ROPS — Grade 2 FEA Certification</div>
+          <p class="card-desc">Design and FEA-based Grade 2 certification of a rollover protective structure for a military light vehicle. Full certification package produced to ISO 3471 and WorkSafe NZ requirements, suitable for formal procurement submission.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">ISO 3471</span><span class="tool-tag">Inventor</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 3: Hydro Dam Gate -->
+      <article class="project-card" data-cats="fea infrastructure structural" data-id="3">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b3"><feGaussianBlur stdDeviation="5"/></filter>
+              <linearGradient id="g3" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="40%" stop-color="#c8a84b"/><stop offset="70%" stop-color="#c84b0a"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+              <marker id="warr3" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#4a8aaa"/>
+              </marker>
+              <linearGradient id="leg3v" x1="0%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <path d="M55 165 L55 38 L125 38 L125 82 L205 82 L205 122 L285 122 L285 165 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1.5"/>
+            <path d="M55 165 L55 38 L125 38 L125 82 L205 82 L205 122 L285 122 L285 165 Z" fill="url(#g3)" opacity="0.42" filter="url(#b3)"/>
+            <ellipse cx="58" cy="48" rx="14" ry="20" fill="#8b1a0a" opacity="0.88" filter="url(#b3)"/>
+            <ellipse cx="125" cy="84" rx="14" ry="14" fill="#c84b0a" opacity="0.78" filter="url(#b3)"/>
+            <ellipse cx="205" cy="120" rx="14" ry="10" fill="#c8a84b" opacity="0.75" filter="url(#b3)"/>
+            <line x1="36" y1="62" x2="52" y2="62" stroke="#4a8aaa" stroke-width="1.5" marker-end="url(#warr3)"/>
+            <line x1="36" y1="95" x2="52" y2="95" stroke="#4a8aaa" stroke-width="1.5" marker-end="url(#warr3)"/>
+            <line x1="36" y1="128" x2="52" y2="128" stroke="#4a8aaa" stroke-width="1.5" marker-end="url(#warr3)"/>
+            <line x1="36" y1="155" x2="52" y2="155" stroke="#4a8aaa" stroke-width="1.5" marker-end="url(#warr3)"/>
+            <rect x="305" y="38" width="8" height="127" rx="1" fill="url(#leg3v)" opacity="0.85"/>
+            <text x="317" y="42" font-family="monospace" font-size="6" fill="#8a7e5f">HIGH</text>
+            <text x="317" y="167" font-family="monospace" font-size="6" fill="#8a7e5f">LOW</text>
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#b8bfc9" stroke-width="0.3" opacity="0.1"/>
+            <line x1="200" y1="0" x2="200" y2="200" stroke="#b8bfc9" stroke-width="0.3" opacity="0.08"/>
+          </svg>
+          <div class="card-tag">FEA · Structural</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Water Infrastructure</div>
+          <div class="card-title">Hydro Dam Gate Structure Analysis</div>
+          <p class="card-desc">Static and fatigue FEA of a hydro dam control gate structure under normal operating and flood-event loading conditions. Analysis supported a refurbishment decision extending the structure's operational life by an estimated 25 years.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">Fatigue</span><span class="tool-tag">AS4100</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 4: Conveyor Frame -->
+      <article class="project-card" data-cats="structural mining fea" data-id="4">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b4"><feGaussianBlur stdDeviation="4"/></filter>
+              <marker id="da4" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#c8a84b"/>
+              </marker>
+              <linearGradient id="leg4" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <rect x="35" y="84" width="330" height="13" rx="1" fill="#0e1316" stroke="#1e2428" stroke-width="1"/>
+            <rect x="35" y="103" width="330" height="13" rx="1" fill="#0e1316" stroke="#1e2428" stroke-width="1"/>
+            <line x1="90" y1="84" x2="90" y2="116" stroke="#1e2428" stroke-width="2"/>
+            <line x1="145" y1="84" x2="145" y2="116" stroke="#1e2428" stroke-width="2"/>
+            <line x1="200" y1="84" x2="200" y2="116" stroke="#1e2428" stroke-width="2"/>
+            <line x1="255" y1="84" x2="255" y2="116" stroke="#1e2428" stroke-width="2"/>
+            <line x1="310" y1="84" x2="310" y2="116" stroke="#1e2428" stroke-width="2"/>
+            <ellipse cx="90" cy="90" rx="18" ry="11" fill="#8b1a0a" opacity="0.88" filter="url(#b4)"/>
+            <ellipse cx="90" cy="110" rx="18" ry="11" fill="#6b2a0a" opacity="0.82" filter="url(#b4)"/>
+            <ellipse cx="200" cy="84" rx="24" ry="9" fill="#c84b0a" opacity="0.72" filter="url(#b4)"/>
+            <ellipse cx="310" cy="90" rx="17" ry="11" fill="#8b1a0a" opacity="0.82" filter="url(#b4)"/>
+            <ellipse cx="145" cy="100" rx="14" ry="9" fill="#c8a84b" opacity="0.62" filter="url(#b4)"/>
+            <line x1="200" y1="62" x2="200" y2="82" stroke="#c8a84b" stroke-width="1.2" marker-end="url(#da4)"/>
+            <text x="208" y="74" font-family="monospace" font-size="6" fill="#c8a84b">LOAD</text>
+            <rect x="30" y="163" width="185" height="7" rx="1" fill="url(#leg4)" opacity="0.85"/>
+            <text x="30" y="161" font-family="monospace" font-size="6" fill="#8a7e5f">0 MPa</text>
+            <text x="213" y="161" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">285 MPa</text>
+            <line x1="0" y1="60" x2="400" y2="60" stroke="#b8bfc9" stroke-width="0.3" opacity="0.08"/>
+            <line x1="0" y1="140" x2="400" y2="140" stroke="#b8bfc9" stroke-width="0.3" opacity="0.08"/>
+          </svg>
+          <div class="card-tag">FEA · Fatigue</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Mining &amp; Heavy Industry</div>
+          <div class="card-title">Heavy Duty Conveyor Frame — Fatigue Assessment</div>
+          <p class="card-desc">Fatigue life assessment of a high-cycle conveyor frame experiencing cracking at welded joints. FEA identified the critical failure mode and guided a weld toe improvement programme that eliminated repeat cracking in service.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">nCode</span><span class="tool-tag">Fatigue</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 5: FOPS Roof Panel -->
+      <article class="project-card" data-cats="rops structural" data-id="5">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b5"><feGaussianBlur stdDeviation="5"/></filter>
+              <marker id="fopa5" markerWidth="7" markerHeight="7" refX="3" refY="3" orient="auto">
+                <path d="M0,0 L7,3 L0,6 Z" fill="#c8a84b"/>
+              </marker>
+              <linearGradient id="leg5" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <path d="M78 158 L78 68 L108 44 L262 44 L292 68 L292 158 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1.5"/>
+            <ellipse cx="185" cy="44" rx="58" ry="12" fill="#8b1a0a" opacity="0.95" filter="url(#b5)"/>
+            <ellipse cx="185" cy="60" rx="42" ry="18" fill="#c84b0a" opacity="0.72" filter="url(#b5)"/>
+            <ellipse cx="185" cy="88" rx="32" ry="20" fill="#c8a84b" opacity="0.48" filter="url(#b5)"/>
+            <rect x="78" y="40" width="214" height="8" rx="1" fill="#1a2028" stroke="#2a3040" stroke-width="1"/>
+            <line x1="185" y1="10" x2="185" y2="34" stroke="#c8a84b" stroke-width="2" marker-end="url(#fopa5)"/>
+            <text x="193" y="22" font-family="monospace" font-size="7" fill="#c8a84b">IMPACT</text>
+            <ellipse cx="80" cy="105" rx="10" ry="32" fill="#4a7a4a" opacity="0.58" filter="url(#b5)"/>
+            <ellipse cx="290" cy="105" rx="10" ry="32" fill="#4a7a4a" opacity="0.58" filter="url(#b5)"/>
+            <rect x="300" y="166" width="90" height="7" rx="1" fill="url(#leg5)" opacity="0.85"/>
+            <text x="300" y="164" font-family="monospace" font-size="6" fill="#8a7e5f">LOW</text>
+            <text x="388" y="164" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">HIGH</text>
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#b8bfc9" stroke-width="0.3" opacity="0.08"/>
+          </svg>
+          <div class="card-tag">FOPS · Review</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Construction Equipment</div>
+          <div class="card-title">Excavator FOPS Roof Panel — OEM Review</div>
+          <p class="card-desc">Independent FEA review of a falling object protective structure roof panel submitted by an OEM. The review identified a sub-standard weld specification and provided recommendations to bring the structure into compliance with ISO 8083.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">ISO 8083</span><span class="tool-tag">Review</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 6: Weapon Mount -->
+      <article class="project-card" data-cats="defence structural fea" data-id="6">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b6"><feGaussianBlur stdDeviation="4"/></filter>
+              <marker id="la6" markerWidth="5" markerHeight="5" refX="3" refY="2.5" orient="auto">
+                <path d="M0,0 L5,2.5 L0,5 Z" fill="#c8a84b"/>
+              </marker>
+              <linearGradient id="leg6" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="50%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <path d="M55 145 L205 145 L205 158 L55 158 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1"/>
+            <path d="M95 145 L95 58 L122 58 L122 145 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1"/>
+            <path d="M122 72 L305 72 L305 92 L122 92 Z" fill="#0e1316" stroke="#1e2428" stroke-width="1"/>
+            <path d="M95 102 L122 72 L122 102 Z" fill="#1a2028" stroke="#1e2428" stroke-width="1"/>
+            <ellipse cx="97" cy="64" rx="16" ry="26" fill="#8b1a0a" opacity="0.92" filter="url(#b6)"/>
+            <ellipse cx="112" cy="88" rx="20" ry="13" fill="#c84b0a" opacity="0.82" filter="url(#b6)"/>
+            <ellipse cx="305" cy="80" rx="15" ry="15" fill="#6b3a1a" opacity="0.72" filter="url(#b6)"/>
+            <ellipse cx="200" cy="80" rx="14" ry="11" fill="#c8a84b" opacity="0.62" filter="url(#b6)"/>
+            <line x1="305" y1="52" x2="305" y2="70" stroke="#c8a84b" stroke-width="1.5" marker-end="url(#la6)"/>
+            <text x="260" y="48" font-family="monospace" font-size="6" fill="#c8a84b">APPLIED LOAD</text>
+            <path d="M122 92 L307 95 L307 73 L122 72" fill="none" stroke="rgba(200,168,75,0.22)" stroke-width="1" stroke-dasharray="3,3"/>
+            <rect x="310" y="130" width="82" height="7" rx="1" fill="url(#leg6)" opacity="0.85"/>
+            <text x="310" y="128" font-family="monospace" font-size="6" fill="#8a7e5f">0 MPa</text>
+            <text x="390" y="128" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">380</text>
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#b8bfc9" stroke-width="0.3" opacity="0.08"/>
+            <line x1="200" y1="0" x2="200" y2="200" stroke="#b8bfc9" stroke-width="0.3" opacity="0.06"/>
+          </svg>
+          <div class="card-tag">FEA · Defence</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Defence — Equipment Mounting</div>
+          <div class="card-title">Weapon System Mounting Bracket Analysis</div>
+          <p class="card-desc">Structural FEA of a weapon system mounting bracket on a military platform, assessing static and dynamic loading including muzzle impulse. Analysis confirmed structural adequacy and identified an optimal weld specification at the critical joint.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">ANSYS</span><span class="tool-tag">Dynamic</span><span class="tool-tag">AS4100</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- PROJECT 7: 3D Scanning & Reverse Engineering -->
+      <article class="project-card" data-cats="scanning structural mining" data-id="7">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b7"><feGaussianBlur stdDeviation="2"/></filter>
+              <filter id="b7soft"><feGaussianBlur stdDeviation="5"/></filter>
+              <radialGradient id="scan-glow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#4a9aaa" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#4a9aaa" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="leg7" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#1a3a6a"/><stop offset="50%" stop-color="#4a9aaa"/><stop offset="100%" stop-color="#c8a84b"/>
+              </linearGradient>
+            </defs>
+            <!-- dark background atmosphere -->
+            <ellipse cx="200" cy="100" rx="140" ry="80" fill="url(#scan-glow)" filter="url(#b7soft)"/>
+            <!-- point cloud dots — simulating a scanned component -->
+            <!-- outer hull profile dots -->
+            <g fill="#4a9aaa" opacity="0.9">
+              <!-- left upright -->
+              <circle cx="80"  cy="55"  r="1.2"/><circle cx="82"  cy="65"  r="1"/><circle cx="79"  cy="75"  r="1.2"/>
+              <circle cx="81"  cy="85"  r="1"/><circle cx="80"  cy="95"  r="1.2"/><circle cx="82"  cy="105" r="1"/>
+              <circle cx="79"  cy="115" r="1.2"/><circle cx="81"  cy="125" r="1"/><circle cx="80"  cy="135" r="1.2"/>
+              <circle cx="82"  cy="145" r="1"/>
+              <!-- right upright -->
+              <circle cx="320" cy="55"  r="1.2"/><circle cx="318" cy="65"  r="1"/><circle cx="321" cy="75"  r="1.2"/>
+              <circle cx="319" cy="85"  r="1"/><circle cx="320" cy="95"  r="1.2"/><circle cx="318" cy="105" r="1"/>
+              <circle cx="321" cy="115" r="1.2"/><circle cx="319" cy="125" r="1"/><circle cx="320" cy="135" r="1.2"/>
+              <circle cx="318" cy="145" r="1"/>
+              <!-- top beam -->
+              <circle cx="100" cy="52"  r="1"/><circle cx="120" cy="50"  r="1.2"/><circle cx="140" cy="51"  r="1"/>
+              <circle cx="160" cy="50"  r="1.2"/><circle cx="180" cy="51"  r="1"/><circle cx="200" cy="50"  r="1.2"/>
+              <circle cx="220" cy="51"  r="1"/><circle cx="240" cy="50"  r="1.2"/><circle cx="260" cy="51"  r="1"/>
+              <circle cx="280" cy="50"  r="1.2"/><circle cx="300" cy="52"  r="1"/>
+              <!-- bottom beam -->
+              <circle cx="100" cy="148" r="1"/><circle cx="120" cy="150" r="1.2"/><circle cx="140" cy="149" r="1"/>
+              <circle cx="160" cy="150" r="1.2"/><circle cx="180" cy="149" r="1"/><circle cx="200" cy="150" r="1.2"/>
+              <circle cx="220" cy="149" r="1"/><circle cx="240" cy="150" r="1.2"/><circle cx="260" cy="149" r="1"/>
+              <circle cx="280" cy="150" r="1.2"/><circle cx="300" cy="148" r="1"/>
+            </g>
+            <!-- internal detail dots — higher density, yellow-tinted for geometry features -->
+            <g fill="#c8a84b" opacity="0.75">
+              <circle cx="130" cy="85"  r="1.2"/><circle cx="145" cy="80"  r="1"/><circle cx="160" cy="88"  r="1.2"/>
+              <circle cx="175" cy="82"  r="1"/><circle cx="190" cy="86"  r="1.2"/><circle cx="200" cy="80"  r="1"/>
+              <circle cx="215" cy="85"  r="1.2"/><circle cx="228" cy="82"  r="1"/><circle cx="240" cy="88"  r="1.2"/>
+              <circle cx="255" cy="80"  r="1"/>
+              <circle cx="130" cy="115" r="1.2"/><circle cx="145" cy="120" r="1"/><circle cx="160" cy="112" r="1.2"/>
+              <circle cx="175" cy="118" r="1"/><circle cx="190" cy="114" r="1.2"/><circle cx="200" cy="120" r="1"/>
+              <circle cx="215" cy="115" r="1.2"/><circle cx="228" cy="118" r="1"/><circle cx="240" cy="112" r="1.2"/>
+              <circle cx="255" cy="120" r="1"/>
+              <!-- cross-member dots -->
+              <circle cx="135" cy="96"  r="1.2"/><circle cx="135" cy="100" r="1"/><circle cx="135" cy="104" r="1.2"/>
+              <circle cx="200" cy="96"  r="1.2"/><circle cx="200" cy="100" r="1"/><circle cx="200" cy="104" r="1.2"/>
+              <circle cx="265" cy="96"  r="1.2"/><circle cx="265" cy="100" r="1"/><circle cx="265" cy="104" r="1.2"/>
+            </g>
+            <!-- sparse noise dots — mimics real point cloud scatter -->
+            <g fill="#b8bfc9" opacity="0.35">
+              <circle cx="92"  cy="70"  r="0.8"/><circle cx="310" cy="90"  r="0.8"/><circle cx="170" cy="58"  r="0.8"/>
+              <circle cx="230" cy="142" r="0.8"/><circle cx="108" cy="130" r="0.8"/><circle cx="290" cy="65"  r="0.8"/>
+              <circle cx="155" cy="72"  r="0.8"/><circle cx="245" cy="128" r="0.8"/><circle cx="195" cy="60"  r="0.8"/>
+              <circle cx="210" cy="140" r="0.8"/><circle cx="120" cy="108" r="0.8"/><circle cx="280" cy="108" r="0.8"/>
+            </g>
+            <!-- scanner beam line -->
+            <line x1="370" y1="20" x2="200" y2="100" stroke="#4a9aaa" stroke-width="0.8" opacity="0.4" stroke-dasharray="4,3"/>
+            <circle cx="370" cy="20" r="4" fill="#4a9aaa" opacity="0.8"/>
+            <circle cx="370" cy="20" r="7" fill="none" stroke="#4a9aaa" stroke-width="0.8" opacity="0.4"/>
+            <text x="330" y="16" font-family="monospace" font-size="6" fill="#4a9aaa">SCANNER</text>
+            <!-- deviation callout — small red dot indicating a deviation -->
+            <circle cx="200" cy="100" r="5" fill="#8b1a0a" opacity="0.9" filter="url(#b7)"/>
+            <line x1="205" y1="95" x2="222" y2="78" stroke="#c8a84b" stroke-width="0.8"/>
+            <text x="224" y="76" font-family="monospace" font-size="6" fill="#c8a84b">+2.3mm</text>
+            <!-- legend -->
+            <rect x="30" y="168" width="160" height="7" rx="1" fill="url(#leg7)" opacity="0.85"/>
+            <text x="30"  y="166" font-family="monospace" font-size="6" fill="#8a7e5f">NOMINAL</text>
+            <text x="188" y="166" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">DEVIATION</text>
+            <!-- grid -->
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#b8bfc9" stroke-width="0.3" opacity="0.07"/>
+            <line x1="200" y1="0"   x2="200" y2="200" stroke="#b8bfc9" stroke-width="0.3" opacity="0.07"/>
+          </svg>
+          <div class="card-tag">3D Scanning</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Mining — Legacy Equipment</div>
+          <div class="card-title">As-Built Scanning &amp; Reverse Engineering for FEA</div>
+          <p class="card-desc">3D scanning of an ageing structural frame where original drawings were unavailable. The point cloud was processed into a precise CAD model in Autodesk Inventor, which then served as the geometry input for an ANSYS FEA structural assessment ahead of a planned load increase.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">3D Scan</span><span class="tool-tag">Inventor</span><span class="tool-tag">ANSYS</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+      <!-- PROJECT 8: 3D Scanning — Worn Component Reverse Engineering -->
+      <article class="project-card" data-cats="scanning structural" data-id="8">
+        <div class="card-visual">
+          <svg class="fea-canvas" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="b8"><feGaussianBlur stdDeviation="2.5"/></filter>
+              <filter id="b8glow"><feGaussianBlur stdDeviation="6"/></filter>
+              <radialGradient id="scan-glow8" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#4a7a5a" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#4a7a5a" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="wear-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#4a7a4a"/><stop offset="40%" stop-color="#c8a84b"/><stop offset="100%" stop-color="#8b1a0a"/>
+              </linearGradient>
+            </defs>
+            <!-- ambient glow -->
+            <ellipse cx="130" cy="100" rx="100" ry="70" fill="url(#scan-glow8)" filter="url(#b8glow)" opacity="0.7"/>
+            <!-- LEFT: worn component point cloud -->
+            <!-- outer worn profile — irregular dots -->
+            <g fill="#4a9aaa" opacity="0.85">
+              <circle cx="55"  cy="55"  r="1.2"/><circle cx="72"  cy="48"  r="1"/><circle cx="90"  cy="44"  r="1.2"/>
+              <circle cx="108" cy="47"  r="1"/><circle cx="124" cy="53"  r="1.2"/><circle cx="138" cy="62"  r="1"/>
+              <circle cx="148" cy="74"  r="1.2"/><circle cx="152" cy="88"  r="1"/><circle cx="150" cy="102" r="1.2"/>
+              <circle cx="144" cy="115" r="1"/><circle cx="133" cy="126" r="1.2"/><circle cx="119" cy="133" r="1"/>
+              <circle cx="103" cy="137" r="1.2"/><circle cx="87"  cy="135" r="1"/><circle cx="72"  cy="128" r="1.2"/>
+              <circle cx="59"  cy="118" r="1"/><circle cx="50"  cy="105" r="1.2"/><circle cx="46"  cy="90"  r="1"/>
+              <circle cx="48"  cy="75"  r="1.2"/><circle cx="52"  cy="63"  r="1"/>
+            </g>
+            <!-- worn surface irregularities — red/orange deviation blobs -->
+            <ellipse cx="140" cy="70"  rx="14" ry="9"  fill="#8b1a0a" opacity="0.8" filter="url(#b8)"/>
+            <ellipse cx="50"  cy="95"  rx="10" ry="12" fill="#c84b0a" opacity="0.75" filter="url(#b8)"/>
+            <ellipse cx="108" cy="138" rx="12" ry="7"  fill="#8b1a0a" opacity="0.7" filter="url(#b8)"/>
+            <!-- nominal profile overlay — dashed circle -->
+            <circle cx="100" cy="92" r="60" fill="none" stroke="#c8a84b" stroke-width="0.8" stroke-dasharray="4,3" opacity="0.5"/>
+            <!-- internal structure dots -->
+            <g fill="#c8a84b" opacity="0.6">
+              <circle cx="100" cy="92"  r="1.2"/><circle cx="115" cy="80"  r="1"/><circle cx="85"  cy="80"  r="1.2"/>
+              <circle cx="115" cy="104" r="1"/><circle cx="85"  cy="104" r="1.2"/><circle cx="100" cy="70"  r="1"/>
+              <circle cx="100" cy="114" r="1.2"/><circle cx="78"  cy="92"  r="1"/><circle cx="122" cy="92"  r="1.2"/>
+            </g>
+            <!-- bore detail -->
+            <circle cx="100" cy="92" r="18" fill="none" stroke="#4a9aaa" stroke-width="0.8" opacity="0.4"/>
+            <g fill="#4a9aaa" opacity="0.5">
+              <circle cx="100" cy="74"  r="0.9"/><circle cx="118" cy="92"  r="0.9"/><circle cx="100" cy="110" r="0.9"/><circle cx="82"  cy="92"  r="0.9"/>
+            </g>
+
+            <!-- DIVIDER -->
+            <line x1="210" y1="20" x2="210" y2="180" stroke="#b8bfc9" stroke-width="0.5" stroke-dasharray="3,4" opacity="0.2"/>
+            <text x="206" y="14" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">AS-FOUND</text>
+            <text x="214" y="14" font-family="monospace" font-size="6" fill="#c8a84b">NOMINAL MODEL</text>
+
+            <!-- RIGHT: clean CAD model — solid outlines -->
+            <circle cx="305" cy="92" r="62" fill="none" stroke="#c8a84b" stroke-width="1.5" opacity="0.9"/>
+            <circle cx="305" cy="92" r="62" fill="rgba(200,168,75,0.04)"/>
+            <circle cx="305" cy="92" r="20" fill="none" stroke="#c8a84b" stroke-width="1" opacity="0.7"/>
+            <!-- radial lines — engineering drawing style -->
+            <line x1="305" y1="30"  x2="305" y2="154" stroke="#c8a84b" stroke-width="0.6" opacity="0.25"/>
+            <line x1="243" y1="92"  x2="367" y2="92"  stroke="#c8a84b" stroke-width="0.6" opacity="0.25"/>
+            <line x1="261" y1="48"  x2="349" y2="136" stroke="#c8a84b" stroke-width="0.6" opacity="0.15"/>
+            <line x1="349" y1="48"  x2="261" y2="136" stroke="#c8a84b" stroke-width="0.6" opacity="0.15"/>
+            <!-- bolt hole circles -->
+            <circle cx="305" cy="42"  r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="305" cy="142" r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="255" cy="117" r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="355" cy="117" r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="255" cy="67"  r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <circle cx="355" cy="67"  r="5" fill="#0e1316" stroke="#c8a84b" stroke-width="0.8" opacity="0.7"/>
+            <!-- centre mark -->
+            <line x1="299" y1="92" x2="311" y2="92" stroke="#c8a84b" stroke-width="0.8" opacity="0.6"/>
+            <line x1="305" y1="86" x2="305" y2="98" stroke="#c8a84b" stroke-width="0.8" opacity="0.6"/>
+
+            <!-- wear legend -->
+            <rect x="218" y="165" width="130" height="7" rx="1" fill="url(#wear-grad)" opacity="0.85"/>
+            <text x="218" y="163" font-family="monospace" font-size="6" fill="#8a7e5f">0 mm</text>
+            <text x="346" y="163" font-family="monospace" font-size="6" fill="#8a7e5f" text-anchor="end">+3.8 mm wear</text>
+
+            <!-- grid -->
+            <line x1="0" y1="100" x2="400" y2="100" stroke="#b8bfc9" stroke-width="0.3" opacity="0.07"/>
+          </svg>
+          <div class="card-tag">3D Scanning</div>
+          <div class="card-confidential">Client Anonymised</div>
+        </div>
+        <div class="card-body">
+          <div class="card-sector">Heavy Industry — Parts Remanufacture</div>
+          <div class="card-title">Worn Component Reverse Engineering &amp; Drawing Production</div>
+          <p class="card-desc">3D scanning of a worn OEM drive flange — no longer in production — to reverse engineer a replacement. The scan captured actual worn geometry; nominal dimensions were recovered by analysis and comparison with mating components, producing a full manufacturing drawing package for local remanufacture.</p>
+          <div class="card-footer">
+            <div class="card-tools">
+              <span class="tool-tag">3D Scan</span><span class="tool-tag">Inventor</span><span class="tool-tag">GD&amp;T</span>
+            </div>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      </article>
+
+    <div id="no-results" style="display:none;text-align:center;padding:4rem 0;">
+      <p style="font-family:'DM Mono',monospace;font-size:0.75rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--khaki);">No projects match this filter</p>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <h2>Similar Project in Mind?</h2>
+    <p>Every engagement starts with a direct conversation. Tell Andrew about your project and he'll respond within one business day.</p>
+    <div class="cta-btns">
+      <a href="crutchworks-contact.html" class="btn-primary">Start the Conversation</a>
+      <a href="crutchworks-contact.html" class="btn-secondary">View Contact Details →</a>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div class="footer-logo">CRUTCH<span>WORKS</span></div>
+  <div class="footer-info">Wellington, New Zealand · Mechanical Engineering Consultancy<br>© 2025 Crutchworks Ltd</div>
+  <div class="footer-charter">Chartered Professional Engineer<br>Engineering New Zealand</div>
+</footer>
+
+<!-- DETAIL OVERLAY -->
+<div class="detail-overlay" id="detail-overlay">
+  <div class="detail-panel" id="detail-panel">
+    <button class="detail-close" id="detail-close">✕ Close</button>
+    <div class="detail-visual" id="detail-visual"></div>
+    <div class="detail-body">
+      <div class="detail-meta" id="detail-meta"></div>
+      <h2 id="detail-title"></h2>
+      <div class="detail-section">
+        <div class="detail-section-title">Project Overview</div>
+        <p id="detail-overview"></p>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Engineering Approach</div>
+        <p id="detail-approach"></p>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Outcomes</div>
+        <ul class="outcomes-list" id="detail-outcomes"></ul>
+      </div>
+      <div class="detail-section">
+        <div class="detail-section-title">Standards &amp; Tools</div>
+        <div class="standards-used" id="detail-standards"></div>
+      </div>
+      <div class="detail-cta">
+        <a href="crutchworks-contact.html" class="btn-primary">Discuss a Similar Project</a>
+        <a href="crutchworks-defence.html" class="btn-secondary">View All Services →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const projects = {
+  "1":{sector:"Mining & Heavy Industry",type:"FEA Analysis + ROPS Verification",duration:"3 weeks",software:"ANSYS Mechanical",title:"Mill Reline Machine Structural Verification",overview:"A NZ mining operator required structural verification of a large mill reline machine prior to return-to-service after a modification programme. The boom arm and chassis had been modified from the original OEM specification, requiring independent engineering sign-off before operational use could resume.",approach:"A detailed 3D FEA model was constructed in ANSYS Mechanical using geometry derived from the client's engineering drawings. The model incorporated actual weld joint representations and was loaded to maximum rated capacity with appropriate dynamic factors per AS3990. Mesh sensitivity studies were conducted at all high-stress regions to ensure result accuracy. A total of seven load cases were assessed including maximum lift, maximum reach, and emergency stop conditions.",outcomes:["Stress concentration at modified weld detail identified — peak von Mises stress exceeded yield at fillet toe","Recommended weld detail change brought peak stress to 78% of yield — within acceptable limits","Full certification report produced suitable for client's internal assurance process","Machine returned to service within 4 weeks of project commencement","No in-service issues reported in 18-month follow-up period"],standards:["AS3990","AS4100","ANSYS Mechanical","Static Structural FEA","Weld Assessment"]},
+  "2":{sector:"Defence & Military Vehicles",type:"ROPS Design + FEA Certification",duration:"5 weeks",software:"ANSYS Mechanical + Inventor",title:"Light Vehicle ROPS — Grade 2 FEA Certification",overview:"A defence prime contractor required design and independent FEA-based certification of a rollover protective structure for a military light utility vehicle. The ROPS was required to meet Grade 2 certification standard under ISO 3471 and to be supported by a full engineering package suitable for inclusion in a formal procurement submission to the NZDF.",approach:"The ROPS was designed from first principles in Autodesk Inventor, using a rectangular tube section frame with gusseted joint details. The design was optimised to minimise weight while maintaining structural performance within the operator deflection limit zone. FEA certification analysis was performed in ANSYS Mechanical per ISO 3471 Annex B (analytical method), applying longitudinal, lateral, and vertical load cases sequentially. Post-processing confirmed energy absorption requirements were met at each stage without encroachment on the DLV.",outcomes:["ROPS design passed all three ISO 3471 load cases — no DLV encroachment","Total ROPS mass: 62 kg — 14% below initial design target","Full Grade 2 certification package issued including FEA results, design drawings, and materials certification","Documentation package accepted by procurement authority without further queries","Design subsequently adopted as standard fitment on the vehicle variant"],standards:["ISO 3471","WorkSafe NZ ROPS Code","AS4100","ANSYS Mechanical","Autodesk Inventor","Grade 2 FEA Certification"]},
+  "3":{sector:"Water Infrastructure",type:"FEA Analysis — Static & Fatigue",duration:"4 weeks",software:"ANSYS Mechanical",title:"Hydro Dam Gate Structure Analysis",overview:"A NZ electricity generator required independent structural assessment of a hydro dam control gate structure to support a refurbishment decision. The structure was approaching its original design life, and the operator needed engineering evidence to either justify continued operation, refurbishment, or replacement.",approach:"A detailed ANSYS FEA model of the gate structure was constructed, incorporating hydrostatic pressure loading under normal operating and 1-in-200-year flood event conditions. Fatigue analysis was performed using a representative gate cycle count derived from operational records. Corrosion-affected section properties were incorporated using inspection data provided by the client. Results were compared against AS4100 and fatigue design curves from AS/NZS 1554.",outcomes:["Structure demonstrated adequate static capacity under both normal and flood loading","Fatigue assessment identified two weld details approaching their design life — targeted weld repairs recommended","Post-repair fatigue life assessed at 28 years — justifying refurbishment over replacement","Estimated client saving: >$4M compared to full gate replacement","Engineering report accepted by the client's independent certifier without revision"],standards:["AS4100","AS/NZS 1554","ANSYS Mechanical","Fatigue Analysis","Hydrostatic Loading"]},
+  "4":{sector:"Mining & Heavy Industry",type:"FEA — Fatigue Assessment",duration:"3 weeks",software:"ANSYS Mechanical + nCode",title:"Heavy Duty Conveyor Frame — Fatigue Assessment",overview:"A mining operation was experiencing repeat cracking at welded cross-member connections on a heavy-duty conveyor frame. Previous repairs had been unsuccessful, with cracks re-initiating within weeks. The client required an engineering investigation to identify the root cause and recommend a lasting solution.",approach:"Operational load data was acquired from strain gauges installed at the suspect locations during a two-week measurement campaign. The recorded load spectra were used to drive a detailed ANSYS FEA model of the frame, with weld joint fatigue assessment performed in nCode using the nominal stress method per AS/NZS 1554.6. The analysis identified that the as-welded joint classification significantly underestimated actual stress at the fillet toe under the measured loading.",outcomes:["Root cause identified: weld toe stress concentration combined with higher-than-designed dynamic loading from a belt tracking fault","Belt tracking fault corrected, reducing peak dynamic load by 35%","Weld toe improvement (grinding + peening) at critical joints increased fatigue life 4-fold","Zero repeat cracking in 24-month post-repair monitoring period","Repair programme cost less than 5% of conveyor replacement cost"],standards:["ANSYS Mechanical","nCode","AS/NZS 1554.6","Fatigue Analysis","Strain Gauge Measurement"]},
+  "5":{sector:"Construction Equipment",type:"Independent FEA Review",duration:"1.5 weeks",software:"ANSYS Mechanical",title:"Excavator FOPS Roof Panel — OEM Review",overview:"A NZ equipment distributor required an independent FEA review of a falling object protective structure (FOPS) roof panel supplied by an overseas OEM. The panel was intended for fitment to a 20-tonne excavator operating in a forestry environment, where the risk of falling objects is significant. The client required independent sign-off before the modification could be fielded.",approach:"The OEM's FEA model was reviewed for methodology, mesh quality, and boundary condition appropriateness against the requirements of ISO 8083. The review identified that the OEM had applied an insufficiently refined mesh at the weld detail between the panel and frame, leading to non-conservative stress predictions. An independent ANSYS model was constructed and the analysis repeated with correct mesh density.",outcomes:["OEM FEA identified as non-conservative — independent analysis showed 40% higher weld toe stress","As-submitted weld specification insufficient — would likely fail under Level II FOPS test load","Recommended weld leg size increase and backing bar addition brought structure into compliance","OEM accepted findings and updated their standard design","Modified panels field-fitted without further issues"],standards:["ISO 8083","ANSYS Mechanical","Independent Review","Weld Assessment","FOPS Level II"]},
+  "8":{sector:"Heavy Industry — Parts Remanufacture",type:"3D Scanning + Reverse Engineering + Drawing Production",duration:"2 weeks",software:"3D Scanner · Autodesk Inventor · GD&T",title:"Worn Component Reverse Engineering & Drawing Production",overview:"A NZ processing plant operator had a critical drive flange fail on a primary production line. The OEM had ceased manufacturing the part, and no drawings existed. Lead time for an OEM-sourced replacement was 18–24 weeks — unacceptable for a production-critical asset. The operator needed an engineering solution to enable local remanufacture.",approach:"A structured-light 3D scanner was used to scan both the worn failed component and an undamaged mating component from a sister machine. The two scan datasets were aligned and compared to identify nominal geometry versus worn material. Statistical analysis of the scan data across multiple measurement cross-sections allowed original design dimensions to be recovered with confidence. Autodesk Inventor was used to construct a fully parametric 3D model from the recovered geometry, and a complete set of manufacturing drawings was produced with GD&T tolerancing appropriate for the operating environment. The drawings were issued to a NZ precision engineering shop for manufacture.",outcomes:["Nominal component geometry successfully recovered from worn scan data and mating component comparison","Full manufacturing drawing package produced including GD&T tolerances and surface finish specifications","Replacement component manufactured locally within 3 weeks of project commencement — versus 18–24 weeks OEM lead time","Remanufactured component fitted and returned to service; still operating without issue 12 months later","Client now holds a permanent drawing record enabling future remanufacture without repeat scanning"],standards:["Autodesk Inventor","3D Point Cloud Processing","GD&T (AS1100)","Reverse Engineering","Manufacturing Drawing Production"]},
+  "7":{sector:"Mining — Legacy Equipment",type:"3D Scanning + Reverse Engineering + FEA",duration:"4 weeks",software:"3D Scanner · Autodesk Inventor · ANSYS Mechanical",title:"As-Built Scanning & Reverse Engineering for FEA",overview:"A NZ mining operator needed to assess whether an ageing structural frame could safely handle a proposed increase in operational loading. No original engineering drawings existed — the frame had been built and modified on-site over many years without documentation. Before any structural analysis could begin, an accurate as-built geometric model was required.",approach:"A structured-light 3D scanner was used to capture the full external geometry of the frame in a single site visit, generating a dense point cloud of approximately 12 million points. The point cloud data was registered and cleaned to remove noise and scanner artefacts, then imported into Autodesk Inventor. Key structural elements were modelled as parametric CAD geometry traced from the scan data, preserving actual section sizes, weld geometries, and gusset plate positions. The completed CAD model was then exported into ANSYS Mechanical and meshed for FEA. Static structural analysis was performed under both existing and proposed increased loading, with particular attention paid to the modified joint details identified during scanning.",outcomes:["Full as-built CAD model produced from scan data — first accurate drawing record for the frame in its history","FEA under existing loading confirmed structural adequacy with acceptable safety margins","FEA under proposed increased loading identified one gusset plate connection as inadequate — recommended reinforcement detail provided","Reinforcement fabricated and fitted; re-analysis confirmed compliance","Entire project completed without taking the frame out of service — scanning performed during a scheduled maintenance window"],standards:["Autodesk Inventor","ANSYS Mechanical","AS4100","3D Point Cloud Processing","Reverse Engineering","Static Structural FEA"]},
+  "6":{sector:"Defence — Equipment Mounting",type:"FEA — Static & Dynamic",duration:"4 weeks",software:"ANSYS Mechanical",title:"Weapon System Mounting Bracket Analysis",overview:"A defence prime contractor required structural FEA of a weapon system mounting bracket on a military platform. The analysis was required to support a formal design review, demonstrating structural adequacy under both static and dynamic loading including the impulsive loads generated during weapon firing.",approach:"A detailed ANSYS FEA model of the bracket assembly was constructed from supplied CAD data. Static analysis was performed first to establish baseline performance under transport and handling loads. Dynamic analysis was then conducted to assess the structural response to muzzle impulse loading, characterised by a short-duration high-amplitude force pulse. Contact mechanics at the interface between bracket and platform structure were carefully modelled to ensure realistic load transfer.",outcomes:["Bracket demonstrated adequate static capacity under all transport and handling load cases","Dynamic analysis confirmed structural integrity under maximum muzzle impulse loading","Critical weld at bracket root identified as highest-stressed detail — peak stress 82% of yield (acceptable)","Weld specification recommendation provided to optimise fatigue performance at critical joint","Report accepted by design authority at formal design review — no action items raised"],standards:["AS4100","ANSYS Mechanical","Static Structural FEA","Dynamic Analysis","Weld Assessment","Defence Acquisition"]}
+};
+
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    let vis = 0;
+    document.querySelectorAll('.project-card').forEach(card => {
+      const match = f === 'all' || card.dataset.cats.split(' ').includes(f);
+      card.classList.toggle('hidden', !match);
+      if (match) vis++;
+    });
+    document.getElementById('no-results').style.display = vis === 0 ? 'block' : 'none';
+  });
+});
+
+// Detail overlay
+const overlay = document.getElementById('detail-overlay');
+
+document.querySelectorAll('.project-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const p = projects[card.dataset.id];
+    if (!p) return;
+
+    // Clone visual
+    document.getElementById('detail-visual').innerHTML = card.querySelector('.card-visual').innerHTML;
+
+    document.getElementById('detail-meta').innerHTML =
+      ['Sector|'+p.sector,'Engagement|'+p.type,'Duration|'+p.duration,'Software|'+p.software,'Confidentiality|Client anonymised']
+      .map(s => { const [l,v]=s.split('|'); return `<div class="meta-item"><span class="meta-label">${l}</span><span class="meta-value">${v}</span></div>`; }).join('');
+
+    document.getElementById('detail-title').textContent = p.title;
+    document.getElementById('detail-overview').textContent = p.overview;
+    document.getElementById('detail-approach').textContent = p.approach;
+    document.getElementById('detail-outcomes').innerHTML = p.outcomes.map(o => `<li>${o}</li>`).join('');
+    document.getElementById('detail-standards').innerHTML = p.standards.map(s => `<span class="std-chip">${s}</span>`).join('');
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+});
+
+function closeDetail() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('detail-close').addEventListener('click', closeDetail);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeDetail(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
+</script>
+
+</body>
+</html>
