@@ -547,52 +547,6 @@
     position: relative;
   }
 
-  /* ── BOTTOM BAND ── */
-  .bottom-band {
-    border-top: 1px solid var(--border);
-    padding: 2.5rem 3rem;
-    position: relative;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .bottom-acenz {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--khaki);
-  }
-  .bottom-acenz::before {
-    content: '';
-    width: 20px; height: 1px;
-    background: var(--signal);
-  }
-
-  .bottom-links {
-    display: flex;
-    gap: 2rem;
-  }
-  .bottom-links a {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--khaki);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .bottom-links a:hover { color: var(--signal); }
-
   /* ── FOOTER ── */
   footer {
     background: #060708;
@@ -656,7 +610,6 @@
     .field.full { grid-column: 1; }
     .submit-row { flex-direction: column; align-items: flex-start; gap: 1rem; }
 
-    .bottom-band { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
     footer { padding: 1.5rem; flex-direction: column; text-align: center; }
     .footer-charter { text-align: center; }
   }
@@ -760,12 +713,11 @@
       <div class="panel-section">
         <div class="panel-label">Documents</div>
         <div class="credentials">
-          <!-- TODO: these currently link to the homepage as placeholders — replace with real hosted PDF/document URLs when available -->
           <div class="cred-item">
-            <a href="#" style="color:var(--steel);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--steel)'">ACENZ Registration Certificate ↗</a>
+            <a href="1163043_CPEng.pdf" style="color:var(--steel);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--steel)'">Engineering New Zealand Chartered Member Certificate ↗</a>
           </div>
           <div class="cred-item">
-            <a href="#" style="color:var(--steel);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--steel)'">Short-Form Client Agreement ↗</a>
+            <a href="Contract_Short_Form_Agreement_2019_V2.docx" style="color:var(--steel);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--signal)'" onmouseout="this.style.color='var(--steel)'">Short-Form Client Agreement ↗</a>
           </div>
         </div>
       </div>
@@ -879,16 +831,6 @@
         <div class="success-ref" id="success-ref">REF: CW-<span id="ref-num"></span></div>
       </div>
 
-    </div>
-  </div>
-
-  <!-- BOTTOM BAND -->
-  <div class="bottom-band">
-    <div class="bottom-acenz">ACENZ Registered Consultancy · Engineering New Zealand</div>
-    <div class="bottom-links">
-      <a href="https://crutchworks.com">crutchworks.com</a>
-      <a href="index.html">Defence</a>
-      <a href="https://www.linkedin.com/company/crutchworks" target="_blank">LinkedIn ↗</a>
     </div>
   </div>
 
