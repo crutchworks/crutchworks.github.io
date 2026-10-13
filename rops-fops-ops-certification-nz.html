@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4FLQWVZFK0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-4FLQWVZFK0');
+</script>
+<title>ROPS, FOPS &amp; OPS Design and Certification NZ | Crutchworks</title>
+<meta name="description" content="Chartered engineer in Wellington providing ROPS, FOPS and OPS design, FEA-based certification and independent design review for plant, vehicles and defence.">
+<link rel="canonical" href="https://crutchworks.com/rops-fops-ops-certification-nz.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Crutchworks">
+<meta property="og:title" content="ROPS, FOPS &amp; OPS Design and Certification NZ | Crutchworks">
+<meta property="og:description" content="Chartered engineer in Wellington providing ROPS, FOPS and OPS design, FEA-based certification and independent design review for plant, vehicles and defence.">
+<meta property="og:url" content="https://crutchworks.com/rops-fops-ops-certification-nz.html">
+<meta property="og:image" content="https://crutchworks.com/crutchworks-linkedin-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ROPS, FOPS &amp; OPS Design and Certification NZ | Crutchworks">
+<meta name="twitter:description" content="Chartered engineer in Wellington providing ROPS, FOPS and OPS design, FEA-based certification and independent design review for plant, vehicles and defence.">
+<meta name="twitter:image" content="https://crutchworks.com/crutchworks-linkedin-cover.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0c0e;
+    --offwhite: #f0ede8;
+    --steel: #b8bfc9;
+    --khaki: #8a7e5f;
+    --olive: #4a5240;
+    --signal: #c8a84b;
+    --danger: #8b2323;
+    --grid: rgba(184,191,201,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--offwhite);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  /* GRID TEXTURE */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(10,12,14,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(184,191,201,0.1);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.18em;
+    color: var(--offwhite);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--signal); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--steel);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--signal); }
+
+  .nav-cta {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--signal);
+    padding: 0.55rem 1.4rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+
+  .nav-cta:hover { background: var(--offwhite); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 3rem 5rem;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(74,82,64,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(139,35,35,0.12) 0%, transparent 50%),
+      linear-gradient(160deg, #0a0c0e 0%, #111418 50%, #0c0f0a 100%);
+  }
+
+  .hero-rule {
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(200,168,75,0.3), transparent);
+  }
+
+  .hero-label {
+    position: absolute;
+    top: 8rem;
+    right: 3rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--khaki);
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+
+  .hero-content { position: relative; max-width: 900px; }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--signal);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    line-height: 0.92;
+    letter-spacing: 0.03em;
+    color: var(--offwhite);
+    margin-bottom: 2rem;
+  }
+
+  h1 em {
+    font-style: normal;
+    color: var(--steel);
+    display: block;
+    font-size: 0.65em;
+  }
+
+  .hero-body {
+    font-size: 1.05rem;
+    color: var(--steel);
+    max-width: 540px;
+    margin-bottom: 2.5rem;
+    line-height: 1.75;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--signal);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: var(--offwhite); transform: translateY(-2px); }
+
+  .btn-secondary {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--steel);
+    border: 1px solid rgba(184,191,201,0.3);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--signal); color: var(--signal); }
+
+  .hero-stats {
+    position: absolute;
+    bottom: 5rem;
+    right: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: right;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: var(--signal);
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--khaki);
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 3rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    color: var(--signal);
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    color: var(--offwhite);
+  }
+
+  h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--offwhite);
+    margin-bottom: 0.75rem;
+  }
+
+  /* INTRO / CONTEXT BAND */
+  .context-band {
+    background: linear-gradient(135deg, #111418, #0d100d);
+    border-top: 1px solid rgba(200,168,75,0.2);
+    border-bottom: 1px solid rgba(200,168,75,0.2);
+  }
+
+  .context-inner {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .context-pull {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--signal);
+  }
+
+  .context-text p {
+    color: var(--steel);
+    margin-bottom: 1.2rem;
+    font-size: 0.98rem;
+  }
+
+  .context-text p:last-child { margin-bottom: 0; }
+
+  /* SERVICES GRID */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: rgba(184,191,201,0.1);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .service-card {
+    background: var(--black);
+    padding: 2.5rem;
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .service-card:hover { background: #0f1214; }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 0;
+    background: var(--signal);
+    transition: height 0.4s ease;
+  }
+
+  .service-card:hover::before { height: 100%; }
+
+  .service-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--signal);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .service-icon::before {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 1px;
+    background: var(--signal);
+  }
+
+  .service-card p {
+    font-size: 0.9rem;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  /* CAPABILITY DETAIL */
+  .capability-section { max-width: 1200px; margin: 0 auto; }
+
+  .cap-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+    align-items: center;
+  }
+
+  .cap-row:nth-child(even) .cap-text { order: 2; }
+  .cap-row:nth-child(even) .cap-visual { order: 1; }
+
+  .cap-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--khaki);
+    margin-bottom: 0.8rem;
+  }
+
+  .cap-text h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cap-text p {
+    color: var(--steel);
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .cap-visual {
+    background: linear-gradient(135deg, #0f1214, #131a12);
+    border: 1px solid rgba(184,191,201,0.08);
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cap-visual::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 120px; height: 120px;
+    border: 1px solid rgba(200,168,75,0.15);
+    transform: rotate(15deg);
+  }
+
+  .standards-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .standards-list li {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    color: var(--steel);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(184,191,201,0.07);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .standards-list li::before {
+    content: '▸';
+    color: var(--signal);
+    font-size: 0.6rem;
+  }
+
+  /* DEFENCE CONTEXT */
+  .defence-context {
+    background: linear-gradient(160deg, #0d1008, #0a0c0e);
+    border-top: 1px solid rgba(74,82,64,0.3);
+  }
+
+  .defence-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .defence-body p {
+    color: var(--steel);
+    margin-bottom: 1.2rem;
+    font-size: 0.98rem;
+  }
+
+  .defence-callout {
+    background: rgba(74,82,64,0.2);
+    border-left: 3px solid var(--olive);
+    padding: 2rem;
+    margin-top: 1.5rem;
+  }
+
+  .defence-callout p {
+    color: var(--offwhite);
+    font-style: italic;
+    font-size: 1rem;
+    margin-bottom: 0 !important;
+  }
+
+  .defence-sidebar h3 {
+    font-size: 1.3rem;
+    color: var(--signal);
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(184,191,201,0.08);
+  }
+
+  .sidebar-item-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--khaki);
+    margin-bottom: 0.3rem;
+  }
+
+  .sidebar-item-val {
+    font-size: 0.9rem;
+    color: var(--steel);
+  }
+
+  /* WHY CRUTCHWORKS */
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .why-item {
+    padding: 2rem 0;
+    border-top: 2px solid rgba(184,191,201,0.1);
+    transition: border-color 0.3s;
+  }
+
+  .why-item:hover { border-color: var(--signal); }
+
+  .why-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem;
+    color: rgba(200,168,75,0.15);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .why-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+
+  .why-item p {
+    font-size: 0.88rem;
+    color: var(--steel);
+    line-height: 1.7;
+  }
+
+  /* PROCESS */
+  .process-section {
+    background: #0d0f0b;
+    border-top: 1px solid rgba(184,191,201,0.05);
+  }
+
+  .process-inner { max-width: 1100px; margin: 0 auto; }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 2rem;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--signal), transparent);
+  }
+
+  .process-step { padding: 4rem 1.5rem 1.5rem; text-align: center; }
+
+  .step-dot {
+    width: 16px; height: 16px;
+    background: var(--signal);
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    position: relative;
+    box-shadow: 0 0 12px rgba(200,168,75,0.4);
+  }
+
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--khaki);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.1em;
+    color: var(--offwhite);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-desc {
+    font-size: 0.8rem;
+    color: rgba(184,191,201,0.6);
+    line-height: 1.5;
+  }
+
+  /* CTA BAND */
+  .cta-band {
+    background: linear-gradient(135deg, var(--olive), #2a2e1f);
+    padding: 5rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-band::before {
+    content: 'CRUTCHWORKS';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18vw;
+    color: rgba(255,255,255,0.04);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .cta-band h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .cta-band p {
+    color: rgba(240,237,232,0.7);
+    max-width: 560px;
+    margin: 0 auto 2.5rem;
+    font-size: 1rem;
+  }
+
+  /* FOOTER */
+  footer {
+    background: #060708;
+    border-top: 1px solid rgba(184,191,201,0.07);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    color: var(--steel);
+  }
+
+  .footer-logo span { color: var(--signal); }
+
+  .footer-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--khaki);
+    text-align: center;
+  }
+
+  .footer-charter {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--khaki);
+    text-align: right;
+  }
+
+  /* DIVIDERS */
+  hr.section-rule {
+    border: none;
+    border-top: 1px solid rgba(184,191,201,0.07);
+    margin: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-content > * {
+    animation: fadeUp 0.7s ease both;
+  }
+
+  .hero-eyebrow { animation-delay: 0.1s; }
+  h1 { animation-delay: 0.25s; }
+  .hero-body { animation-delay: 0.4s; }
+  .hero-ctas { animation-delay: 0.55s; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 0 1.5rem 4rem; }
+    .hero-stats { display: none; }
+    .context-inner, .cap-row, .defence-inner { grid-template-columns: 1fr; gap: 2rem; }
+    .cap-row:nth-child(even) .cap-text { order: 0; }
+    .cap-row:nth-child(even) .cap-visual { order: 0; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .process-steps::before { display: none; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .footer-charter { text-align: center; }
+  }
+  .svc-hero{min-height:0;padding:9rem 3rem 4rem;align-items:flex-end;}
+  .svc-hero h1{font-size:clamp(3rem,7vw,6rem);}
+  .crumbs{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--khaki);margin-bottom:1.5rem;}
+  .crumbs a{color:var(--khaki);text-decoration:none;}
+  .crumbs a:hover{color:var(--signal);}
+  .svc-links{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1rem;}
+  .svc-links a{font-family:'DM Mono',monospace;font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--signal);text-decoration:none;}
+  .svc-links a:hover{color:var(--offwhite);}
+  @media(max-width:900px){.svc-hero{padding:7rem 1.5rem 3rem;}}
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Service", "name": "ROPS, FOPS & OPS Design and Certification", "description": "Chartered engineer in Wellington providing ROPS, FOPS and OPS design, FEA-based certification and independent design review for plant, vehicles and defence.", "url": "https://crutchworks.com/rops-fops-ops-certification-nz.html", "provider": {"@type": "ProfessionalService", "name": "Crutchworks Ltd", "url": "https://crutchworks.com/"}, "areaServed": "NZ"}</script>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">CRUTCH<span>WORKS</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#capability">Capability</a></li>
+    <li><a href="crutchworks-portfolio.html">Portfolio</a></li>
+    <li><a href="index.html">Defence</a></li>
+    <li><a href="crutchworks-contact.html">Contact</a></li>
+  </ul>
+  <a href="crutchworks-contact.html" class="nav-cta">Engage Us</a>
+</nav>
+
+<section class="hero svc-hero">
+  <div class="hero-bg"></div>
+  
+  <div class="hero-content">
+    <div class="crumbs"><a href="index.html">Crutchworks</a> / ROPS, FOPS &amp; OPS Design and Certification</div>
+    <div class="hero-eyebrow">Design &amp; Certification</div>
+    <h1>ROPS, FOPS<br>&amp; OPS <em>Certification</em></h1>
+    <p class="hero-body">Design, analysis and certification of operator protective structures for light and heavy vehicles, plant equipment and military vehicles, signed off by a Chartered Professional Engineer.</p>
+    <div class="hero-ctas">
+      <a href="crutchworks-contact.html" class="btn-primary">Discuss Your Project</a>
+      <a href="crutchworks-portfolio.html" class="btn-secondary">View Our Portfolio</a>
+    </div>
+  </div>
+</section>
+
+<hr class="section-rule">
+
+<section>
+  <div class="capability-section">
+    <div class="cap-row">
+      <div class="cap-text">
+        <div class="cap-eyebrow">What we do</div>
+        <h3>Operator Protective Structures</h3>
+        <p>Rollover, falling-object and operator protective structures must do more than pass a test or an analysis. They must be certified by a suitably qualified engineer and documented to a standard that satisfies regulators and procurement teams.</p>
+        <p>Crutchworks designs protective structures for light and heavy vehicles, carries out FEA-based Grade 2 certification analysis, and produces complete certification packages.</p>
+      </div>
+      <div class="cap-visual">
+        <div style="color:var(--signal);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;margin-bottom:1.5rem;">Services</div>
+        <ul class="standards-list">
+          <li>New ROPS, FOPS and OPS design</li>
+          <li>Custom ROPS with workshop drawings</li>
+          <li>Design check and approval of OEM designs</li>
+          <li>Review of third-party and contractor designs</li>
+          <li>FEA-based Grade 2 certification analysis</li>
+          <li>Full certification documentation packages</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="cap-row">
+      <div class="cap-text">
+        <div class="cap-eyebrow">Standards</div>
+        <h3>Codes We Work To</h3>
+        <p>Structures are assessed against the standards that apply to the machine and its operating environment, with the basis of every assessment documented in the report.</p>
+        <p>Where a project calls for a different or additional standard, we confirm the applicable requirements with you at the start of the engagement.</p>
+      </div>
+      <div class="cap-visual">
+        <div style="color:var(--signal);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;margin-bottom:1.5rem;">Relevant Standards</div>
+        <ul class="standards-list">
+          <li>ISO 3471 — ROPS for Earth-Moving Machinery</li>
+          <li>ISO 8082 — ROPS for Forestry Machinery</li>
+          <li>WorkSafe NZ Operator Protective Structures Code</li>
+          <li>AS3990 — Mechanical Equipment (Steel)</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+  <div style="max-width:1200px;margin:0 auto;">
+    <p style="color:var(--steel);line-height:1.8;margin-bottom:1.5rem;">Whether you are procuring new vehicles, modifying existing plant, or need a review of a contractor-supplied design, Crutchworks provides the independent engineering sign-off your project requires. You work directly with the Chartered engineer doing the analysis.</p>
+    <div class="svc-links"><a href="fea-consulting-wellington.html">Finite Element Analysis →</a><a href="defence-engineering-nz.html">Defence Engineering →</a></div>
+  </div>
+</section>
+
+<section class="cta-band">
+  <h2>Need ROPS, FOPS or OPS Certification?</h2>
+  <p>Send a brief and we will come back with scope and a fee estimate. No obligation, just an engineering conversation.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="crutchworks-contact.html" class="btn-primary">Start the Conversation</a>
+    <a href="crutchworks-portfolio.html" class="btn-secondary">View Our Portfolio →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">CRUTCH<span>WORKS</span></div>
+  <div class="footer-info">
+    Wellington, New Zealand · Mechanical Engineering Consultancy<br>
+    <span style="margin-top:0.4rem;display:inline-flex;gap:1.5rem;">
+      <a href="crutchworks-portfolio.html" style="color:var(--khaki);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color=&#39;var(--signal)&#39;" onmouseout="this.style.color=&#39;var(--khaki)&#39;">Portfolio</a>
+      <a href="crutchworks-contact.html" style="color:var(--khaki);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color=&#39;var(--signal)&#39;" onmouseout="this.style.color=&#39;var(--khaki)&#39;">Contact</a>
+      <a href="https://crutchworks.com" style="color:var(--khaki);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color=&#39;var(--signal)&#39;" onmouseout="this.style.color=&#39;var(--khaki)&#39;">crutchworks.com</a>
+    </span>
+  </div>
+  <div class="footer-charter">
+    Chartered Professional Engineer<br>
+    Engineering New Zealand
+  </div>
+</footer>
+
+
+
+</body></html>
